@@ -67,7 +67,7 @@ if selected=="Portföy Test Et":
         if len(assets)>7:
             st.error("Portföyünde En Fazla 7 Hisse Olabilir!!!")
         else:
-  
+         
                 df=df_port(assets=assets,startd=startd,endd=endd)
                 precent_return,percent_volatility,percent_var,weights=expected_return(df,assets)
                 chart_return=chart_return(df)
