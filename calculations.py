@@ -80,41 +80,7 @@ def get_stock_list(hisse_tanim="100",endeks=False,usd=False):
   return hisseler
 
 
-def backtrader_sma(stocks,startDate,endDate,setcash=100000,buy_perc=20,period=8): 
-  from datetime import datetime
-  import backtrader as bt
-  #import matplotlib.pyplot as plt
- 
-  class SmaCross(bt.SignalStrategy):
-    def __init__(self):
-      try:
-        sma=bt.ind.SMA(period=period)
-        price=self.data
-        crossover=bt.ind.CrossOver(price,sma)
-        self.signal_add(bt.SIGNAL_LONG,crossover)
-      except socket.error as e: 
-        print ("Error creating socket: %s" % e) 
-
-  cerebro=bt.Cerebro()
-  cerebro.broker.setcash(setcash)
-  cerebro.addstrategy(SmaCross)
-  def get_data(stocks,startDate,endDate):
-    stockData=yf.download(stocks,startDate,endDate,progress=False)
-    return stockData
-  stockData=get_data(stocks,startDate,endDate)
-  data=bt.feeds.PandasData(dataname=stockData)
-  cerebro.adddata(data)
-
-  cerebro.addsizer(bt.sizers.AllInSizer,percents=buy_perc)
-  cerebro.run()
-
-
-  #print(cerebro.broker.getvalue())
-  #cerebro.plot(iplot=False)
-  
-  return cerebro.broker.getvalue()
-
-def backtesting(ticker="GARAN.IS",start="2022-01-01",end="2022-12-16",ma1=10,ma2=20,cash=100000,commis=0.0005):
+def backtesting_crossMA(ticker="GARAN.IS",start="2022-01-01",end="2022-12-16",ma1=10,ma2=20,cash=100000,commis=0.0005):
   from backtesting import Backtest, Strategy
   from backtesting.lib import crossover
   from backtesting.test import SMA
@@ -144,3 +110,12 @@ def backtesting(ticker="GARAN.IS",start="2022-01-01",end="2022-12-16",ma1=10,ma2
   output = bt.run()
   
   return output,bt.plot(open_browser=False)
+
+
+def test():
+  import talib
+  import numpy
+  c = numpy.random.randn(100)
+
+  rsi = talib.RSI(c)
+  return rsi
