@@ -1,9 +1,10 @@
 import streamlit as st
-from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,test
+from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira
 from charts import chart_return
 import pandas as pd
 import datetime
 from streamlit_option_menu import option_menu
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import time
 import math
 
@@ -125,8 +126,9 @@ if selected=="Otomatik Portföy":
 
 if selected=="Teknik Analizler":
     selection=st.radio("Hisse Tipi Seç",options=("Portföyümün Teknik Analizi","Bist100 ün En İyileri","Tüm Borsa En İyiler"),horizontal=True)
-    if selection=="Portföyümün Teknik Analizi":
-        st.markdown(assets)
+    if selection=="Bist100 ün En İyileri":
+        with st.spinner("Hesaplamalar Yapılırken Biraz Beklemenizi Rica Ederim"):
+            AgGrid(teknik_sira())
 
 
 
@@ -142,7 +144,6 @@ if selected=="Strateji Test":
     hoper2=str6.text_input("Hareketli Ortalama Periodu",20)
     #riskperc=str6.text_input("Her İşlemde Anaparanızın Ne Kadarını Riske Atacaksınız",20)
     strateji_olustur=st.button("Stratejiyi Test Et")
-    st.markdown(test())
     if strateji_olustur:
         output,fig=backtesting_crossMA(ticker=stocks,start=startdate,end=enddate,ma1=int(hoper1),ma2=int(hoper2),cash=float(str_bakiye),commis=0.0005)
         sr1,sr2,sr3,sr4,sr5,sr6=st.columns(6)

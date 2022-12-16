@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
+import streamlit as st
 plt.style.use("fivethirtyeight")
 
 def df_port(assets,startd,endd):
@@ -112,10 +113,49 @@ def backtesting_crossMA(ticker="GARAN.IS",start="2022-01-01",end="2022-12-16",ma
   return output,bt.plot(open_browser=False)
 
 
-def test():
-  import talib
-  import numpy
-  c = numpy.random.randn(100)
+@st.cache()
+def teknik_sira():
+  from tradingview_ta import TA_Handler, Interval, Exchange
+  import pandas as pd
+  import numpy as np
+  df_get_analysis=pd.DataFrame()
+  df_get_analysis_full=pd.DataFrame()
 
-  rsi = talib.RSI(c)
-  return rsi
+
+  interv=[Interval.INTERVAL_5_MINUTES,Interval.INTERVAL_15_MINUTES,Interval.INTERVAL_30_MINUTES,Interval.INTERVAL_1_HOUR,Interval.INTERVAL_2_HOURS,Interval.INTERVAL_4_HOURS,Interval.INTERVAL_1_DAY,Interval.INTERVAL_1_WEEK]
+  df_hist=pd.DataFrame()
+  df_bist100=pd.DataFrame()
+  test=pd.read_html("https://uzmanpara.milliyet.com.tr/canli-borsa/bist-100-hisseleri/")
+  df_bist100=df_bist100.append(test[1])
+  df_bist100=df_bist100.append(test[2])
+  df_bist100=df_bist100.append(test[3]).reset_index()
+  df_bist100=df_bist100.rename(columns={"Menkul":"Kod"})
+  df_bist100 = df_bist100[~df_bist100['Kod'].astype(str).str.startswith('X')]
+
+                        
+  hisseler=df_bist100["Kod"].unique()
+
+
+  df_get_analysis_full["Kod"]=hisseler
+
+  for i in hisseler:
+    try:
+      analiz = TA_Handler(
+          symbol=i,
+          screener="turkey",
+          exchange="BIST",
+          interval=Interval.INTERVAL_1_DAY
+      )
+      result=analiz.get_analysis().summary
+      df=pd.DataFrame.from_dict(result, orient='index').T
+      df["Kod"]=i
+      df=df.add_suffix("_1D")
+      df=df.rename(columns={"Kod"+"_1D":"Kod"})
+      df_get_analysis=df_get_analysis.append(df)
+    except:
+        print("hata",i)
+
+  df_get_analysis["skor"]=df_get_analysis["BUY_1D"]-df_get_analysis["SELL_1D"]-df_get_analysis["NEUTRAL_1D"]
+  df_get_analysis=df_get_analysis.sort_values(by="skor",ascending=False)
+  df_get_analysis["sira"]=range(1,1+len(df_get_analysis))
+  return df_get_analysis
