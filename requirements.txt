@@ -7,3 +7,4 @@ yfinance==0.1.87
 pyportfolioopt==1.5.4
 Backtesting==0.3.3
 bokeh==2.4.3
+ta-lib-0.4.19 
