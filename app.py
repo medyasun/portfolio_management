@@ -1,10 +1,11 @@
 import streamlit as st
-from calculations import df_port,expected_return,opt_port,get_stock_list
+from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting
 from charts import chart_return
 import pandas as pd
 import datetime
 from streamlit_option_menu import option_menu
 import time
+import math
 
 st.set_page_config(layout="wide")
 
@@ -46,8 +47,8 @@ with st.sidebar:
     st.image("https://cdn.freebiesupply.com/logos/large/2x/stock-logo-png-transparent.png")
     selected=option_menu(
         menu_title=None,
-        options=["Portföy Test Et","Otomatik Portföy","Teknik Analizler"],
-        icons=["app-indicator","activity","graph-up-arrow"],
+        options=["Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test"],
+        icons=["app-indicator","activity","graph-up-arrow","bi-clock-history"],
         styles={"nav-link-selected": {"background-color": "#0be494"}}
     )
 
@@ -129,4 +130,25 @@ if selected=="Teknik Analizler":
 
 
 
+if selected=="Strateji Test":  
+    str1, str2, str3 = st.columns(3)
+    stocks=str1.text_input("Hisse Kodunu Giriniz","GARAN.IS")
+    startdate = str2.date_input("Test Başlangıç Dönemini Giriniz",datetime.date(2022, 1, 1))
+    enddate = str3.date_input("Test Bitiş Dönemini Giriniz")
+    str4, str5, str6 = st.columns(3)
 
+    str_bakiye=str4.text_input("Başlangıç Bakiyeniz",100000)
+    hoper1=str5.text_input("Hareketli Ortalama Periodu",10)
+    hoper2=str6.text_input("Hareketli Ortalama Periodu",20)
+    #riskperc=str6.text_input("Her İşlemde Anaparanızın Ne Kadarını Riske Atacaksınız",20)
+    strateji_olustur=st.button("Stratejiyi Test Et")
+    if strateji_olustur:
+        output,fig=backtesting(ticker=stocks,start=startdate,end=enddate,ma1=int(hoper1),ma2=int(hoper2),cash=float(str_bakiye),commis=0.0005)
+        sr1,sr2,sr3,sr4,sr5,sr6=st.columns(6)
+        sr1.metric("Son Bakiye", "{:,}".format(math.floor(output[4])),help="Belirttiğin Tarih aralığının son günü elindeki bakiye.")
+        sr2.metric("Getiri", "%"+str(round(output[6],2)),help="Belirttiğin Tarih aralığındaki yüzdesel getiri")
+        sr3.metric("Al Bekle Getirisi", "%"+str(round(output[7],2)),help="Hiç strateji yapmayıp tarih aralığının ilk günü alıp son günü satsaydın oluşacak bakiye.")
+        sr4.metric("En Büyük Kayıp", "%"+str(round(output[13],2)),help="Anaparanın en fazla düştüğü oran.")
+        sr5.metric("Volatilite","%"+str(round(output[9],2)),help="Ortalama bakiyenin hareket aralığı")
+        sr6.metric("Sharp Rasyosu","%"+str(round(output[10],2)),help="Oranın yüksek olması oluşturulan portföyün risklere karşı dayanıklı olduğu, düşük olması ise oluşturulan portföyün risklere açık olduğu anlamına gelir.")
+        st.bokeh_chart(fig)

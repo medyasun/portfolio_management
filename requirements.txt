@@ -5,3 +5,5 @@ streamlit==1.15.2
 streamlit_option_menu==0.3.2
 yfinance==0.1.87
 pyportfolioopt==1.5.4
+Backtesting==0.3.3
+bokeh==2.4.3
