@@ -40,16 +40,6 @@ hide_streamlit_style = """
                 height: 0%;
                 }
                 </style>
-                <body>
-    	        <iframe src="<www.bist50.com>"
-    			frameborder="0"
-    			marginheight="0"
-    			marginwidth="0"
-    			width="100%"
-    			height="100%"
-    			scrolling="auto">
-                </iframe>
-                </body>
                 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
