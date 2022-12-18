@@ -43,6 +43,12 @@ hide_streamlit_style = """
                 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
+reduce_header_height_style = """
+    <style>
+        div.block-container {padding-top:1rem;}
+    </style>
+"""
+st.markdown(reduce_header_height_style, unsafe_allow_html=True)
 
 with st.sidebar:
     st.image("https://cdn.freebiesupply.com/logos/large/2x/stock-logo-png-transparent.png")
