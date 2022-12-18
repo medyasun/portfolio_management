@@ -45,13 +45,16 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 reduce_header_height_style = """
     <style>
-        div.block-container {padding-top:1rem;}
+        div.block-container {padding-top:0rem;}
     </style>
 """
 st.markdown(reduce_header_height_style, unsafe_allow_html=True)
 
+st.header("BIST50 ile Portföyünü Analiz Et")
+st.markdown("""---""")
+
+
 with st.sidebar:
-    st.image("https://cdn.freebiesupply.com/logos/large/2x/stock-logo-png-transparent.png")
     selected=option_menu(
         menu_title=None,
         options=["Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test"],
@@ -63,9 +66,9 @@ with st.sidebar:
 
 if selected=="Portföy Test Et":
     sd, ed = st.columns(2)
-    startd = sd.date_input("Start Date",datetime.date(2022, 1, 1))
-    endd = ed.date_input("End Date")
-    assets=st.text_input("Please Enter Your Portfolio")
+    startd = sd.date_input("Başlangıç Tarihi",datetime.date(2022, 1, 1))
+    endd = ed.date_input("Bitiş Tarihi")
+    assets=st.text_input("Portföyünüzdeki Hisselerin Kodlarını Giriniz-Hisseleri Virgül İle ayırabilirsiniz")
     amount=st.text_input("Yatırmak İstediğiniz Bakiyeyi Belirtiniz")
     assets=assets.upper()
     assets=assets.split(",")
@@ -139,6 +142,7 @@ if selected=="Teknik Analizler":
 
 
 if selected=="Strateji Test":  
+    st.subheader("Stratejileri Kullanarak Para yatırsaydın Ne Olurdu?")
     str1, str2, str3 = st.columns(3)
     stocks=str1.text_input("Hisse Kodunu Giriniz","GARAN.IS")
     startdate = str2.date_input("Test Başlangıç Dönemini Giriniz",datetime.date(2022, 1, 1))
