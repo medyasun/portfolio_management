@@ -86,18 +86,19 @@ if selected=="Portföy Test Et":
 
                 ear,av,sr,allocation,leftover=opt_port(df,amount)
 
-                h1, h2, h3,h4 = st.columns(4)
-                h1.metric("Total Return", precent_return,help="Yıllık Kazandırdığı Tutarı Gösterir")
-                h2.metric("Volatility", percent_volatility)
-                h3.metric("Varyans",percent_var )
-                h4.metric("Equal Weights",str(round(weights[0]*100,2))+"%")
+                with st.expander("Genel Metrikler",expanded=True):
+                    h1, h2, h3,h4 = st.columns(4)
+                    h1.metric("Total Return", precent_return,help="Yıllık Kazandırdığı Tutarı Gösterir")
+                    h2.metric("Volatility", percent_volatility)
+                    h3.metric("Varyans",percent_var )
+                    h4.metric("Equal Weights",str(round(weights[0]*100,2))+"%")
 
 
-                o1, o2, o3,o4 = st.columns(4)
-                o1.metric("Total Return", str(round(ear*100,2))+"%")
-                o2.metric("Volatility", str(round(av*100,2))+"%")
-                o3.metric("Sharp Ratio",round(sr,2) )
-                o4.metric("Kalan Para",str(round(leftover,2)))
+                    o1, o2, o3,o4 = st.columns(4)
+                    o1.metric("Total Return", str(round(ear*100,2))+"%")
+                    o2.metric("Volatility", str(round(av*100,2))+"%")
+                    o3.metric("Sharp Ratio",round(sr,2) )
+                    o4.metric("Kalan Para",str(round(leftover,2)))
 
                 r1,r2=st.columns(2)
 
