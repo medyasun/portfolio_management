@@ -159,3 +159,76 @@ def teknik_sira():
   df_get_analysis=df_get_analysis.sort_values(by="skor",ascending=False)
   df_get_analysis["sira"]=range(1,1+len(df_get_analysis))
   return df_get_analysis
+
+
+def grafik_prophet(df,asset,predict=120):
+  import pandas as pd
+  import matplotlib.pyplot as plt
+  import yfinance as yf
+
+  #-------------------------Prophet------------------------------------------------
+
+  hisse=asset
+  tahmin_hisse=''+hisse+'   Gerçekleşen & Tahmin'
+  tahmin_gun=predict
+  tahmin_gun_rakam=predict
+
+
+  #plt.figure(figsize=(20,10))
+  plt.style.use("dark_background")
+
+  df["Date"]=pd.to_datetime(df["Date"], errors='coerce') 
+
+
+  df_prop=df[["Adj Close","Date"]]
+  dataset=df_prop
+  son_kapanis=dataset[dataset["Date"].max()==dataset["Date"]][["Adj Close"]].round(2)
+
+  uzun_tahmin=pd.DataFrame(columns=['ds',"y"])
+  uzun_tahmin['ds'] = pd.to_datetime(dataset['Date'],format='%Y-%m-%d').dt.date
+  uzun_tahmin['y'] = dataset['Adj Close']
+
+  from prophet import Prophet
+  m = Prophet(daily_seasonality="auto",yearly_seasonality="auto",weekly_seasonality="auto",changepoint_prior_scale= 0.1,seasonality_prior_scale= 0.01)
+  m.fit(uzun_tahmin)
+  future = m.make_future_dataframe(periods=tahmin_gun)
+  forecast = m.predict(future)
+  tahmin=forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
+  #-------------------------Prophet------------------------------------------------
+
+  true=df[["Date","Adj Close"]]
+  true=true.set_index("Date")
+  tahmin=tahmin[["ds","yhat"]]
+  tahmin=tahmin.set_index("ds")
+  tahmin=pd.merge(tahmin,true, left_index=True, right_index=True,how="left")
+
+  plt.style.use("tableau-colorblind10")
+
+  for param in ['text.color', 'axes.labelcolor', 'xtick.color', 'ytick.color']:
+      plt.rcParams[param] = '0.9'  # very light grey
+  for param in ['figure.facecolor', 'axes.facecolor', 'savefig.facecolor']:
+      plt.rcParams[param] = '#000000'  # bluish dark grey
+  colors = [
+      '#08F7FE',  # teal/cyan
+      '#FE53BB',  # pink
+      '#F5D300',  # yellow
+      '#00ff41',  # matrix green
+  ]
+
+  df = tahmin
+  df=df.rename(columns={"yhat":"Tahmini Kapanış","close":"Gerçekleşen Kapanış"})
+  fig, ax = plt.subplots(figsize=(20,10))
+  df.plot(marker='o', color=colors, ax=ax,title=tahmin_hisse)
+  # Redraw the data with low alpha and slighty increased linewidth:
+  n_shades = 10
+  diff_linewidth = 1.05
+  alpha_value = 0.3 / n_shades
+
+
+  ax.set_xlim([ax.get_xlim()[0] - 0.2, ax.get_xlim()[1] + 0.2])  # to not have the markers cut off
+  ax.set_ylim(df.min().min())         # hissenin en düşük değeri grafiğin en altında kalsın boşluk olmasın diye. Normalde sıfır yazılabilir
+  ax.yaxis.set_label_position("right")
+  ax.yaxis.tick_right()
+  ax.set_title(tahmin_hisse, fontdict={'fontsize': 40, 'fontweight': 'medium'})
+  plt.legend(["Tahmini Kapanış","Gerçekleşen Kapanış"], fontsize = 30)
+  return plt.show()

@@ -1,5 +1,5 @@
 import streamlit as st
-from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira
+from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet
 from charts import chart_return
 import pandas as pd
 import datetime
@@ -7,6 +7,7 @@ from streamlit_option_menu import option_menu
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import time
 import math
+import yfinance as yf
 
 st.set_page_config(layout="wide")
 
@@ -57,8 +58,8 @@ st.markdown("""---""")
 with st.sidebar:
     selected=option_menu(
         menu_title=None,
-        options=["Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test"],
-        icons=["app-indicator","activity","graph-up-arrow","bi-clock-history"],
+        options=["Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Tahmin Oluştur"],
+        icons=["app-indicator","activity","graph-up-arrow","bi-clock-history","gift"],
         styles={"nav-link-selected": {"background-color": "#0be494"}}
     )
 
@@ -142,7 +143,7 @@ if selected=="Teknik Analizler":
 
 
 if selected=="Strateji Test":  
-    st.subheader("Stratejileri Kullanarak Para yatırsaydın Ne Olurdu?")
+    st.caption("Stratejileri Kullanarak Para yatırsaydın Ne Olurdu?")
     str1, str2, str3 = st.columns(3)
     stocks=str1.text_input("Hisse Kodunu Giriniz","GARAN.IS")
     startdate = str2.date_input("Test Başlangıç Dönemini Giriniz",datetime.date(2022, 1, 1))
@@ -164,3 +165,18 @@ if selected=="Strateji Test":
         sr5.metric("Volatilite","%"+str(round(output[9],2)),help="Ortalama bakiyenin hareket aralığı")
         sr6.metric("Sharp Rasyosu","%"+str(round(output[10],2)),help="Oranın yüksek olması oluşturulan portföyün risklere karşı dayanıklı olduğu, düşük olması ise oluşturulan portföyün risklere açık olduğu anlamına gelir.")
         st.bokeh_chart(fig)
+
+
+if selected=="Tahmin Oluştur":
+    st.caption("Zaman Serisi Analizi İle Trend Tahmini")
+    str1, str2, str3, str4 = st.columns(4)
+    stocks=str1.text_input("Hisse Kodunu Giriniz","GARAN.IS")
+    startdate = str2.date_input("Test Başlangıç Dönemini Giriniz",datetime.date(2020, 1, 1))
+    enddate = str3.date_input("Test Bitiş Dönemini Giriniz")
+    predict_date=str4.text_input("İleride Kaç Gün Tahminlemek İstersin",120)
+    tahmin=st.button("Geleceği Tahmin Et")
+    if tahmin:
+        df=yf.download(stocks,start=startdate,end=enddate,progress=False)["Adj Close"].reset_index()
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        predict=grafik_prophet(df,asset=stocks,predict=int(predict_date))
+        st.pyplot(predict)

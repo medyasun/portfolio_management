@@ -10,3 +10,4 @@ bokeh==2.4.3
 pandas-ta==0.3.14b0
 streamlit-aggrid==0.3.3
 tradingview-ta==3.3.0
+prophet==1.1.1
