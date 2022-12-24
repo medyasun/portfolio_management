@@ -232,3 +232,29 @@ def grafik_prophet(df,asset,predict=120):
   ax.set_title(tahmin_hisse, fontdict={'fontsize': 40, 'fontweight': 'medium'})
   plt.legend(["Tahmini Kapanış","Gerçekleşen Kapanış"], fontsize = 30)
   return plt.show()
+
+
+def genel_bilgiler(stock):
+  import pandas as pd
+  import yfinance as yf
+  msft = yf.Ticker(stock)
+  df=pd.DataFrame.from_dict(msft.info, orient='index').reset_index()
+  logo=df[df["index"]=="logo_url"][0].values[0]
+  short_name=df[df["index"]=="shortName"][0].values[0]
+  pddd=df[df["index"]=="priceToBook"][0].values[0]
+  fd_favok=df[df["index"]=="enterpriseToEbitda"][0].values[0]
+  ozsermaye_borc=df[df["index"]=="debtToEquity"][0].values[0]
+  piyasa_degeri=df[df["index"]=="marketCap"][0].values[0]
+  hisse_adedi=df[df["index"]=="floatShares"][0].values[0]
+  temettu_verimi=df[df["index"]=="dividendYield"][0].values[0]
+  guncel_fiyat=df[df["index"]=="currentPrice"][0].values[0]
+  onceki_kapanis=df[df["index"]=="previousClose"][0].values[0]
+  net_kar_buyume_orani=df[df["index"]=="earningsGrowth"][0].values[0]
+  return logo,short_name,pddd,fd_favok,ozsermaye_borc,piyasa_degeri,hisse_adedi,temettu_verimi,guncel_fiyat,onceki_kapanis,net_kar_buyume_orani
+
+def test(stock):
+  import pandas as pd
+  import yfinance as yf
+  msft = yf.Ticker(stock)
+  #df=pd.DataFrame.from_dict(msft.info, orient='index').reset_index()
+  return msft.info

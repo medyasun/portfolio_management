@@ -1,5 +1,5 @@
 import streamlit as st
-from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet
+from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet,genel_bilgiler,test
 from charts import chart_return
 import pandas as pd
 import datetime
@@ -58,12 +58,32 @@ st.markdown("""---""")
 with st.sidebar:
     selected=option_menu(
         menu_title=None,
-        options=["Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Tahmin Oluştur"],
-        icons=["app-indicator","activity","graph-up-arrow","bi-clock-history","gift"],
+        options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Tahmin Oluştur"],
+        icons=["broadcast","app-indicator","activity","graph-up-arrow","bi-clock-history","gift"],
         styles={"nav-link-selected": {"background-color": "#0be494"}}
     )
 
+if selected=="Genel Bilgiler":
+    stock=st.text_input("Hisse Kodunu Giriniz")
+    bistmi=st.checkbox("BIST",value=True)
 
+    submit=st.button("Bilgileri Getir")
+    if submit:
+        if bistmi==True:
+            stock=stock+".IS"
+
+        
+        logo,short_name,pddd,fd_favok,ozsermaye_borc,piyasa_degeri,hisse_adedi,temettu_verimi,guncel_fiyat,onceki_kapanis,net_kar_buyume_orani=genel_bilgiler(stock)
+        
+        with st.expander("Genel Bilgiler",expanded=True):
+            i1,i2,i3,i4,i5=st.columns(5)
+            i1.image(logo)
+            i2.metric("Güncel Fiyat",str(guncel_fiyat),round(((guncel_fiyat-onceki_kapanis)/onceki_kapanis)*100,2))
+            i3.metric("PD/DD",str(round(pddd,2)))
+            i4.metric("FD/FAVOK",str(round(fd_favok,2)))
+            i5.metric("Piyasa Değeri (mn TL)",f'{round(piyasa_degeri/1000000,0):,}')
+            
+        st.subheader(short_name)
 
 if selected=="Portföy Test Et":
     sd, ed = st.columns(2)
