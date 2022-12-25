@@ -239,6 +239,7 @@ def genel_bilgiler(stock):
   import yfinance as yf
   msft = yf.Ticker(stock)
   df=pd.DataFrame.from_dict(msft.info, orient='index').reset_index()
+  df=df.fillna(0)
   logo=df[df["index"]=="logo_url"][0].values[0]
   short_name=df[df["index"]=="shortName"][0].values[0]
   pddd=df[df["index"]=="priceToBook"][0].values[0]
@@ -250,11 +251,16 @@ def genel_bilgiler(stock):
   guncel_fiyat=df[df["index"]=="currentPrice"][0].values[0]
   onceki_kapanis=df[df["index"]=="previousClose"][0].values[0]
   net_kar_buyume_orani=df[df["index"]=="earningsGrowth"][0].values[0]
-  return logo,short_name,pddd,fd_favok,ozsermaye_borc,piyasa_degeri,hisse_adedi,temettu_verimi,guncel_fiyat,onceki_kapanis,net_kar_buyume_orani
+  calisan_sayisi=df[df["index"]=="fullTimeEmployees"][0].values[0]
+  cari_oran=df[df["index"]=="currentRatio"][0].values[0]
+  cari_oran=df[df["index"]=="currentRatio"][0].values[0]
+  aktif_karlilik=df[df["index"]=="returnOnAssets"][0].values[0]
+  özsermaye_karliligi=df[df["index"]=="returnOnEquity"][0].values[0]
+  likidite_orani=df[df["index"]=="quickRatio"][0].values[0]
+  defter_degeri=df[df["index"]=="bookValue"][0].values[0]
+  fk_orani=df[df["index"]=="trailingPE"][0].values[0]
+  hisse_basi_kar=df[df["index"]=="trailingEps"][0].values[0]
 
-def test(stock):
-  import pandas as pd
-  import yfinance as yf
-  msft = yf.Ticker(stock)
-  #df=pd.DataFrame.from_dict(msft.info, orient='index').reset_index()
-  return msft.info
+  
+  return logo,short_name,pddd,fd_favok,ozsermaye_borc,piyasa_degeri,hisse_adedi,temettu_verimi,guncel_fiyat,onceki_kapanis,\
+         net_kar_buyume_orani,calisan_sayisi,cari_oran,aktif_karlilik,özsermaye_karliligi,likidite_orani,defter_degeri,fk_orani,hisse_basi_kar

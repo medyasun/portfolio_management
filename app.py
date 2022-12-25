@@ -1,5 +1,5 @@
 import streamlit as st
-from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet,genel_bilgiler,test
+from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet,genel_bilgiler
 from charts import chart_return
 import pandas as pd
 import datetime
@@ -72,18 +72,43 @@ if selected=="Genel Bilgiler":
         if bistmi==True:
             stock=stock+".IS"
 
-        
-        logo,short_name,pddd,fd_favok,ozsermaye_borc,piyasa_degeri,hisse_adedi,temettu_verimi,guncel_fiyat,onceki_kapanis,net_kar_buyume_orani=genel_bilgiler(stock)
-        
-        with st.expander("Genel Bilgiler",expanded=True):
-            i1,i2,i3,i4,i5=st.columns(5)
-            i1.image(logo)
-            i2.metric("Güncel Fiyat",str(guncel_fiyat),round(((guncel_fiyat-onceki_kapanis)/onceki_kapanis)*100,2))
-            i3.metric("PD/DD",str(round(pddd,2)))
-            i4.metric("FD/FAVOK",str(round(fd_favok,2)))
-            i5.metric("Piyasa Değeri (mn TL)",f'{round(piyasa_degeri/1000000,0):,}')
-            
-        st.subheader(short_name)
+        try:
+            logo,short_name,pddd,fd_favok,ozsermaye_borc,piyasa_degeri,hisse_adedi,temettu_verimi,guncel_fiyat,onceki_kapanis,\
+            net_kar_buyume_orani,calisan_sayisi,cari_oran,aktif_karlilik,özsermaye_karliligi,likidite_orani,defter_degeri,fk_orani,\
+            hisse_basi_kar=genel_bilgiler(stock)
+
+            st.subheader(short_name)
+            with st.expander("Genel Bilgiler",expanded=True):
+                i1,i2,i3,i4,i5=st.columns(5)
+                i1.image(logo)
+                i2.metric("Güncel Fiyat",str(guncel_fiyat),round(((guncel_fiyat-onceki_kapanis)/onceki_kapanis)*100,2))
+                i3.metric("Hisse Adedi",str(f'{hisse_adedi:,}'))
+                i4.metric("Piyasa Değeri (mn TL)",f'{round(piyasa_degeri/1000000,0):,}')
+                i5.metric("Çalışan Sayısı",str(calisan_sayisi))
+
+            with st.expander("Temel Rasyolar",expanded=True):
+                i11,i21,i31,i41,i51=st.columns(5)
+                i11.metric("PD/DD",str(round(pddd,2)))
+                i21.metric("FD/FAVOK",str(round(fd_favok,2)))
+                i31.metric("Özsermaye Borçluluğu",str(round(ozsermaye_borc,2)))
+                i41.metric("Net Kar Büyüme Oranı",str(round(net_kar_buyume_orani,2)))
+                i51.metric("Temettü Verimi",str(round(temettu_verimi,2)))
+
+                i12,i22,i32,i42,i52=st.columns(5)
+                i12.metric("Cari Oran",str(round(cari_oran,2)))
+                i22.metric("Aktif Karlılık",str(round(aktif_karlilik,2)))
+                i32.metric("Özsermaye Karlılığı",str(round(özsermaye_karliligi,2)))
+                i42.metric("Likidite Oranı",str(round(likidite_orani,2)))
+                i52.metric("Fiyat Kazanç Oranı(F/K)",str(round(fk_orani,2)))
+
+                i13,i23,i33,i43,i53=st.columns(5)
+                i13.metric("Defter Değeri",str(round(defter_degeri,2)))
+                i23.metric("Hisse Başı Kar",str(round(hisse_basi_kar,2)))
+                i33.subheader("")
+                i43.subheader("")
+                i53.subheader("")
+        except:
+            st.warning("Hsse Kodunu Kontrol Ediniz!!!")
 
 if selected=="Portföy Test Et":
     sd, ed = st.columns(2)
