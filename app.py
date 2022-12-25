@@ -9,7 +9,7 @@ import time
 import math
 import yfinance as yf
 
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Hisse Analizleri",page_icon="save-money.png",layout="wide")
 
 hide_streamlit_style = """
                 <style>
@@ -56,10 +56,12 @@ st.markdown("""---""")
 
 
 with st.sidebar:
+    st.image("save-money.png")
     selected=option_menu(
-        menu_title=None,
+        menu_title="Ana Menü",
         options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Tahmin Oluştur"],
         icons=["broadcast","app-indicator","activity","graph-up-arrow","bi-clock-history","gift"],
+        menu_icon="cast",
         styles={"nav-link-selected": {"background-color": "#0be494"}}
     )
 
