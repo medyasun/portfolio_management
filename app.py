@@ -59,7 +59,7 @@ with st.sidebar:
     #st.image("save-money.png")
     selected=option_menu(
         menu_title="Ana Menü",
-        options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Tahmin Oluştur"],
+        options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Trend Tahmini"],
         icons=["broadcast","app-indicator","activity","graph-up-arrow","bi-clock-history","gift"],
         menu_icon="cast",
         styles={"nav-link-selected": {"background-color": "#0be494"}}
@@ -215,14 +215,14 @@ if selected=="Strateji Test":
         st.bokeh_chart(fig)
 
 
-if selected=="Tahmin Oluştur":
+if selected=="Trend Tahmini":
     st.caption("Zaman Serisi Analizi İle Trend Tahmini")
     str1, str2, str3, str4 = st.columns(4)
     stocks=str1.text_input("Hisse Kodunu Giriniz","GARAN.IS")
     startdate = str2.date_input("Test Başlangıç Dönemini Giriniz",datetime.date(2020, 1, 1))
     enddate = str3.date_input("Test Bitiş Dönemini Giriniz")
     predict_date=str4.text_input("İleride Kaç Gün Tahminlemek İstersin",120)
-    tahmin=st.button("Geleceği Tahmin Et")
+    tahmin=st.button("Trendi Tahmin Et")
     if tahmin:
         df=yf.download(stocks,start=startdate,end=enddate,progress=False)["Adj Close"].reset_index()
         st.set_option('deprecation.showPyplotGlobalUse', False)
