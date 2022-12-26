@@ -56,7 +56,7 @@ st.markdown("""---""")
 
 
 with st.sidebar:
-    st.image("save-money.png")
+    #st.image("save-money.png")
     selected=option_menu(
         menu_title="Ana Menü",
         options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Tahmin Oluştur"],
