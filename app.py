@@ -257,8 +257,11 @@ if selected=="Fon Bilgileri":
             gd.configure_side_bar()  # Add a sidebar
             gd.configure_default_column(groupable=True)
             gridOptions = gd.build()
-            AgGrid(df_fon,
-            gridOptions=gridOptions,
-            update_mode=GridUpdateMode.NO_UPDATE,
-            reload_data=True,
-            theme="material")
+            try:
+                AgGrid(df_fon,
+                gridOptions=gridOptions,
+                update_mode=GridUpdateMode.NO_UPDATE,
+                reload_data=True,
+                theme="material")
+            except:
+                st.error("Tarih Aralığını Değiştirerek tekrar Deneyiniz!!!")
