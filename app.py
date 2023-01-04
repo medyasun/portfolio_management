@@ -42,10 +42,11 @@ hide_streamlit_style = """
                 visibility: hidden;
                 height: 0%;
                 }
-                a.viewerBadge_container__1QSob{
+                .viewerBadge_container__1QSob{
                 visibility: hidden;
                 }
                 </style>
+
                 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
