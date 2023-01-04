@@ -244,7 +244,7 @@ if selected=="Trend Tahmini":
 if selected=="Fon Bilgileri":
     st.subheader("Tüm Fonları İstediğiniz Tarih Aralığında Kıyaslayabilirsiniz")
     f1, f2 = st.columns(2)
-    startdate = f1.date_input("Kıyaslanmak İstenen Tarih",datetime.date(2020, 1, 1))
+    startdate = f1.date_input("Kıyaslanmak İstenen Tarih",datetime.date(2023, 1, 1))
     enddate = f2.date_input("Güncel Tarih")
     fonbul=st.button("Fon Bilgilerini Getir")
     if fonbul:
