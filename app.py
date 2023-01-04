@@ -1,5 +1,5 @@
 import streamlit as st
-from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet,genel_bilgiler
+from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet,genel_bilgile,get_fon_data
 from charts import chart_return
 import pandas as pd
 import datetime
@@ -69,8 +69,8 @@ with st.sidebar:
     #st.image("save-money.png")
     selected=option_menu(
         menu_title="Ana Menü",
-        options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Trend Tahmini"],
-        icons=["broadcast","app-indicator","activity","graph-up-arrow","bi-clock-history","gift"],
+        options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Trend Tahmini","Fon Bilgileri"],
+        icons=["broadcast","app-indicator","activity","graph-up-arrow","bi-clock-history","gift","wallet2"],
         menu_icon="cast",
         styles={"nav-link-selected": {"background-color": "#0be494"}}
     )
@@ -240,3 +240,13 @@ if selected=="Trend Tahmini":
         st.set_option('deprecation.showPyplotGlobalUse', False)
         predict=grafik_prophet(df,asset=stocks,predict=int(predict_date))
         st.pyplot(predict)
+
+if selected=="Fon Bilgileri":
+    st.subheader("Tüm Fonları İstediğiniz Tarih Aralığında Kıyaslayabilirsiniz")
+    f1, f2 = st.columns(2)
+    startdate = f1.date_input("Kıyaslanmak İstenen Tarih",datetime.date(2020, 1, 1))
+    enddate = f2.date_input("Güncel Tarih")
+    fonbul=st.button("Fon Bilgilerini Getir")
+    if fonbul:
+        with st.spinner("İlgili Tarihlerdeki Fon Verileri Oluşturulurken Lütfen Bekleyin"):
+            AgGrid(get_fon_data(start=startdate,end=enddate))
