@@ -244,9 +244,21 @@ if selected=="Trend Tahmini":
 if selected=="Fon Bilgileri":
     st.subheader("Tüm Fonları İstediğiniz Tarih Aralığında Kıyaslayabilirsiniz")
     f1, f2 = st.columns(2)
-    startdate = f1.date_input("Kıyaslanmak İstenen Tarih",datetime.date(2023, 1, 1))
-    enddate = f2.date_input("Güncel Tarih")
+    starter = f1.date_input("Kıyaslanmak İstenen Tarih",datetime.date(2023, 1, 2))
+    ender = f2.date_input("Güncel Tarih")
+    starter=pd.to_datetime(starter)
+    ender=pd.to_datetime(ender)
     fonbul=st.button("Fon Bilgilerini Getir")
     if fonbul:
         with st.spinner("İlgili Tarihlerdeki Fon Verileri Oluşturulurken Lütfen Bekleyin"):
-            AgGrid(get_fon_data(start=startdate,end=enddate))
+            df_fon=get_fon_data(start=starter,end=ender)
+            gd= GridOptionsBuilder.from_dataframe(df_fon)
+            gd.configure_pagination(enabled=True, paginationAutoPageSize=True, paginationPageSize=10)  # Add pagination
+            gd.configure_side_bar()  # Add a sidebar
+            gd.configure_default_column(groupable=True)
+            gridOptions = gd.build()
+            AgGrid(df_fon,
+            gridOptions=gridOptions,
+            update_mode=GridUpdateMode.NO_UPDATE,
+            reload_data=True,
+            theme="material")

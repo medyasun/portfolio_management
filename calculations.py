@@ -269,18 +269,24 @@ def genel_bilgiler(stock):
 def get_fon_data(start,end):
   from tefas import Crawler
   import pandas as pd
+  import numpy as np
   tefas = Crawler()
 
   data1 = tefas.fetch(start=start, columns=["code","price","market_cap","number_of_investors","stock"])
   data2 = tefas.fetch(start=end, columns=["code","title", "date", "price","market_cap","number_of_investors","stock"])
   data1=data1.rename(columns={"price":"price_ilk","market_cap":"market_cap_ilk","number_of_investors":"number_of_investors_ilk","stock":"stock_ilk"})
-  data2=pd.concat([data2,data1],axis=1)
-  data2["price_degisim"]=round(((data2["price"]-data2["price_ilk"])/data2["price_ilk"])*100,2)
-  data2["market_cap_degisim"]=round(((data2["market_cap"]-data2["market_cap_ilk"])/data2["market_cap_ilk"])*100,2)
-  data2["number_of_investors_degisim"]=round(((data2["number_of_investors"]-data2["number_of_investors_ilk"])/data2["number_of_investors_ilk"])*100,2)
-  data2["stock_degisim"]=round(((data2["stock"]-data2["stock_ilk"])/data2["stock_ilk"])*100,2)
+  data2=data2.merge(data1,how="left")
+  data2["price_degisim"]=((data2["price"]-data2["price_ilk"])/data2["price_ilk"])*100
+  data2["price_degisim"]=data2["price_degisim"].round(2)
+  data2["market_cap_degisim"]=((data2["market_cap"]-data2["market_cap_ilk"])/data2["market_cap_ilk"])*100
+  data2["market_cap_degisim"]=data2["market_cap_degisim"].round(2)
+  data2["number_of_investors_degisim"]=((data2["number_of_investors"]-data2["number_of_investors_ilk"])/data2["number_of_investors_ilk"])*100
+  data2["number_of_investors_degisim"]=data2["number_of_investors_degisim"].round(2)
+  data2["stock_degisim"]=((data2["stock"]-data2["stock_ilk"])/data2["stock_ilk"])*100
+  data2["stock_degisim"]=data2["stock_degisim"].round(2)
+  data2["market_cap"]=data2["market_cap"].apply('{:,}'.format)
   data2=data2[["code","title","price","price_degisim","market_cap","market_cap_degisim","number_of_investors","number_of_investors_degisim","stock","stock_degisim"]]
-  data2=data.rename(columns={"code":"Fon Kodu","title":"Fon Adı","price":"Fiyat","price_degisim":"Fiyat Değişimi%","market_cap":"Fon Toplam Değeri",\
+  data2=data2.rename(columns={"code":"Fon Kodu","title":"Fon Adı","price":"Fiyat","price_degisim":"Fiyat Değişimi%","market_cap":"Fon Toplam Değeri",\
                             "market_cap_degisim":"Fon Toplam Değer Değişimi%","number_of_investors":"Yatırımcı Sayısı","number_of_investors_degisim":"Yatırımcı Sayısı Değişimi%",\
                             "stock":"Hisse Oranı","stock_degisim":"Hisse Oran Değişimi%"})
 
