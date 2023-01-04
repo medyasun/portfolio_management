@@ -43,7 +43,7 @@ hide_streamlit_style = """
                 height: 0%;
                 }
                 .viewerBadge_link__1S137{
-                visibility: hidden
+                visibility: hidden;
                 }
                 </style>
                 """
