@@ -251,13 +251,14 @@ if selected=="Fon Bilgileri":
     fonbul=st.button("Fon Bilgilerini Getir")
     if fonbul:
         with st.spinner("İlgili Tarihlerdeki Fon Verileri Oluşturulurken Lütfen Bekleyin"):
-            df_fon=get_fon_data(start=starter,end=ender)
-            gd= GridOptionsBuilder.from_dataframe(df_fon)
-            gd.configure_pagination(enabled=True, paginationAutoPageSize=True, paginationPageSize=10)  # Add pagination
-            gd.configure_side_bar()  # Add a sidebar
-            gd.configure_default_column(groupable=True)
-            gridOptions = gd.build()
             try:
+                df_fon=get_fon_data(start=starter,end=ender)
+                gd= GridOptionsBuilder.from_dataframe(df_fon)
+                gd.configure_pagination(enabled=True, paginationAutoPageSize=True, paginationPageSize=10)  # Add pagination
+                gd.configure_side_bar()  # Add a sidebar
+                gd.configure_default_column(groupable=True)
+                gridOptions = gd.build()
+
                 AgGrid(df_fon,
                 gridOptions=gridOptions,
                 update_mode=GridUpdateMode.NO_UPDATE,
