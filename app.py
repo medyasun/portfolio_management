@@ -42,7 +42,7 @@ hide_streamlit_style = """
                 visibility: hidden;
                 height: 0%;
                 }
-                .viewerBadge_container__1QSob{
+                a.viewerBadge_container__1QSob{
                 visibility: hidden;
                 }
                 </style>
