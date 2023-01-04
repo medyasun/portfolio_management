@@ -8,8 +8,10 @@ from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import time
 import math
 import yfinance as yf
+from streamlit_extras.app_logo import add_logo
 
 st.set_page_config(page_title="Hisse Analizleri",page_icon="save-money.png",layout="wide")
+
 
 hide_streamlit_style = """
                 <style>
@@ -40,6 +42,9 @@ hide_streamlit_style = """
                 visibility: hidden;
                 height: 0%;
                 }
+                .viewerBadge_link__1S137{
+                visibility: hidden
+                }
                 </style>
                 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
@@ -57,6 +62,7 @@ st.markdown("""---""")
 
 with st.sidebar:
     #st.image("save-money.png")
+    add_logo("save-money.png")
     selected=option_menu(
         menu_title="Ana Menü",
         options=["Genel Bilgiler","Portföy Test Et","Otomatik Portföy","Teknik Analizler","Strateji Test","Trend Tahmini"],
@@ -64,6 +70,8 @@ with st.sidebar:
         menu_icon="cast",
         styles={"nav-link-selected": {"background-color": "#0be494"}}
     )
+
+
 
 if selected=="Genel Bilgiler":
     stock=st.text_input("Hisse Kodunu Giriniz")
