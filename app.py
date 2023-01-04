@@ -45,6 +45,9 @@ hide_streamlit_style = """
                 a.viewerBadge_container__1QSob{
                 visibility: hidden;
                 }
+                .reportview-container .main .block-container {
+                    padding-top: 1rem;
+                }
                 </style>
 
                 """
