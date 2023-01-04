@@ -1,5 +1,5 @@
 import streamlit as st
-from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet,genel_bilgile,get_fon_data
+from calculations import df_port,expected_return,opt_port,get_stock_list,backtesting_crossMA,teknik_sira,grafik_prophet,genel_bilgiler,get_fon_data
 from charts import chart_return
 import pandas as pd
 import datetime
