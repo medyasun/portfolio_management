@@ -8,7 +8,7 @@ from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import time
 import math
 import yfinance as yf
-from streamlit_extras.app_logo import add_logo
+
 
 st.set_page_config(page_title="Hisse Analizleri",page_icon="save-money.png",layout="wide")
 
