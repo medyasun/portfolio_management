@@ -42,7 +42,7 @@ hide_streamlit_style = """
                 visibility: hidden;
                 height: 0%;
                 }
-                .viewerBadge_link__1S137{
+                #root > div:nth-child(1) > div > div > a{
                 visibility: hidden;
                 }
                 </style>
