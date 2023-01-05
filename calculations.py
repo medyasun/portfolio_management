@@ -272,6 +272,7 @@ def get_fon_data(start,end):
   import numpy as np
   tefas = Crawler()
 
+  fon_tipi=pd.read_csv("Takasbank TEFAS  Fon Karşılaştırma.csv",usecols=["Fon Kodu","Şemsiye Fon Türü"])
   data1 = tefas.fetch(start=start, columns=["code","price","market_cap","number_of_investors","stock"])
   data2 = tefas.fetch(start=end, columns=["code","title", "date", "price","market_cap","number_of_investors","stock"])
   data1=data1.rename(columns={"price":"price_ilk","market_cap":"market_cap_ilk","number_of_investors":"number_of_investors_ilk","stock":"stock_ilk"})
@@ -289,5 +290,6 @@ def get_fon_data(start,end):
   data2=data2.rename(columns={"code":"Fon Kodu","title":"Fon Adı","price":"Fiyat","price_degisim":"Fiyat Değişimi%","market_cap":"Fon Toplam Değeri",\
                             "market_cap_degisim":"Fon Toplam Değer Değişimi%","number_of_investors":"Yatırımcı Sayısı","number_of_investors_degisim":"Yatırımcı Sayısı Değişimi%",\
                             "stock":"Hisse Oranı","stock_degisim":"Hisse Oran Değişimi%"})
+  data2=data2.merge(fon_tipi,how="left")
 
   return data2
