@@ -261,7 +261,7 @@ if selected=="Fon Bilgileri":
 
                 AgGrid(df_fon,
                 gridOptions=gridOptions,
-                update_mode=GridUpdateMode.MODEL_CHANGED,
+                update_mode=GridUpdateMode.NO_UPDATE,
                 reload_data=True,
                 theme="material")
             except:
