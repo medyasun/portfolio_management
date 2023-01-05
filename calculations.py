@@ -272,7 +272,7 @@ def get_fon_data(start,end):
   import numpy as np
   tefas = Crawler()
 
-  fon_tipi=pd.read_csv("Takasbank TEFAS  Fon Karşılaştırma.csv",usecols=["Fon Kodu","Şemsiye Fon Türü"])
+  fon_tipi=pd.read_csv("Takasbank TEFAS  Fon Karşılaştırma.csv",usecols=["Fon Kodu","Şemsiye Fon Türü"], encoding='utf8')
   data1 = tefas.fetch(start=start, columns=["code","price","market_cap","number_of_investors","stock"])
   data2 = tefas.fetch(start=end, columns=["code","title", "date", "price","market_cap","number_of_investors","stock"])
   data1=data1.rename(columns={"price":"price_ilk","market_cap":"market_cap_ilk","number_of_investors":"number_of_investors_ilk","stock":"stock_ilk"})
