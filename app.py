@@ -121,8 +121,8 @@ if selected=="Genel Bilgiler":
                 i33.subheader("")
                 i43.subheader("")
                 i53.subheader("")
-        except:
-            st.warning("Hsse Kodunu Kontrol Ediniz!!!")
+        except Exception as e:
+            st.warning(e)
 
 if selected=="Portföy Test Et":
     sd, ed = st.columns(2)
